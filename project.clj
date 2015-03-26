@@ -7,5 +7,6 @@
                  [compojure "1.3.2"]
                  [http-kit "2.1.18"]
                  [ring/ring-defaults "0.1.4"]
+                 [ring/ring-json "0.3.1"]
                  [org.clojure/tools.logging "0.3.1"]]
   :main outfolio.core)

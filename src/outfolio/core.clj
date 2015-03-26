@@ -3,9 +3,12 @@
             [compojure.core :refer :all]
             [compojure.route :as route]
             [org.httpkit.server :refer [run-server]]
-            [ring.middleware.defaults :refer :all]))
+            [ring.middleware.defaults :refer :all]
+
+            [outfolio.api :as api]))
 
 (defroutes app-routes
+  api/routes
   (GET "/" [] "Hello World!")
   (route/resources "/")
   (route/not-found "Not Found"))
