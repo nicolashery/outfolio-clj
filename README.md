@@ -6,7 +6,13 @@ Also see [Oufolio Clojure Dev Blog](https://github.com/nicolashery/outfolio-clj-
 
 ## Quick start
 
-You will need Java and [Leiningen](http://leiningen.org/) installed.
+You will need Java, MongoDB 2.6, and [Leiningen](http://leiningen.org/) installed.
+
+In a separate terminal, start MongoDB with:
+
+```bash
+$ mongod
+```
 
 Start the app with:
 
