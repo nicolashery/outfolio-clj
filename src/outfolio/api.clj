@@ -3,12 +3,12 @@
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.util.response :refer [response status]]
 
-            [outfolio.model :as model]))
+            [outfolio.db :as db]))
 
 ;; Fake auth middleware
 (defn wrap-auth [handler]
   (fn [request]
-    (handler (assoc request :user {:_id "1" :name "Don Draper"}))))
+    (handler (assoc request :user {:_id "5515a24e78309661a4aa7e0d" :name "Don Draper"}))))
 
 ;; Standardize error response
 (defn error-response [status-code error-name error-description]
@@ -18,11 +18,11 @@
 
 (defn get-cards [request]
   (let [user-id (get-in request [:user :_id])]
-    (response (model/get-cards-for-user user-id))))
+    (response (db/get-cards-owned-by user-id))))
 
 (defn get-card [request]
   (let [card-id (get-in request [:params :card-id])
-        card (model/get-card card-id)]
+        card (db/get-card card-id)]
     (if (nil? card)
       (error-response 404 "CardNotFound" "No matching card for that id")
       (response card))))
@@ -32,7 +32,7 @@
         ;; TODO: some validation of request body
         card (-> (:body request)
                  (assoc :owner owner)
-                 (model/create-card))]
+                 (db/create-card))]
     (response card)))
 
 (defroutes routes-bare
