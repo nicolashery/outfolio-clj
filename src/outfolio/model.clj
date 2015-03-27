@@ -4,6 +4,9 @@
 (def db (atom {:users {}
                :cards {}}))
 
+(def last-user-id (atom 0))
+(def last-card-id (atom 0))
+
 ;; Initial sample data
 (reset! db {
   :users {"1" {:_id "1"
@@ -20,6 +23,8 @@
                :city "New York"
                :notes "Dancing bar, mainstream music, large room, usually not a long line to get in"
                :owner {:_id "1" :name "Don Draper"}}}})
+(reset! last-user-id 1)
+(reset! last-card-id 2)
 
 
 (defn card-owned-by? [user-id]
@@ -34,3 +39,9 @@
 
 (defn get-card [card-id]
   (get (:cards @db) card-id))
+
+(defn create-card [card]
+  (let [card-id (str (swap! last-card-id inc))
+        card (assoc card :_id card-id)]
+    (swap! db assoc-in [:cards card-id] card)
+    card))

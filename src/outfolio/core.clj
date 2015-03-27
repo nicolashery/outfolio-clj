@@ -13,8 +13,12 @@
   (route/resources "/")
   (route/not-found "Not Found"))
 
+(def app-defaults
+  ;; Allow CORS for POST requests, security handled by auth token in request
+  (assoc-in site-defaults [:security :anti-forgery] false))
+
 (defn app []
-  (wrap-defaults app-routes site-defaults))
+  (wrap-defaults app-routes app-defaults))
 
 (defn start [port]
   (run-server (app) {:port port}))
