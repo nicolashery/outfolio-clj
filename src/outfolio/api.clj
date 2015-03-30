@@ -35,7 +35,7 @@
         card (-> (:body request)
                  (assoc :owner owner)
                  (db/create-card))]
-    (response card)))
+    (status (response card) 201)))
 
 (defn put-card [request]
   (let [card-id (get-in request [:params :card-id])
