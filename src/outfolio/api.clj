@@ -1,5 +1,5 @@
 (ns outfolio.api
-  (:require [compojure.core :refer [defroutes GET POST]]
+  (:require [compojure.core :refer [defroutes GET POST PUT]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.util.response :refer [response status]]
 
@@ -35,10 +35,19 @@
                  (db/create-card))]
     (response card)))
 
+(defn put-card [request]
+  (let [card-id (get-in request [:params :card-id])
+        card-updates (:body request)
+        card (db/get-card card-id)]
+    (if (nil? card)
+      (error-response 404 "CardNotFound" "No matching card for that id")
+      (response (db/update-card card-id card-updates)))))
+
 (defroutes routes-bare
   (GET "/api/cards" [] get-cards)
   (GET "/api/cards/:card-id" [] get-card)
-  (POST "/api/cards" [] post-card))
+  (POST "/api/cards" [] post-card)
+  (PUT "/api/cards/:card-id" [] put-card))
 
 (def routes
   (-> routes-bare

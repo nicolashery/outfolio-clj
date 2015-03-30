@@ -37,3 +37,8 @@
                  (update-in [:owner :_id] to-object-id))]
     (mc/insert db "cards" card)
     (card-object-id-to-string card)))
+
+(defn update-card [card-id card-attributes]
+  (mc/update-by-id db "cards" (to-object-id card-id "") card-attributes)
+  ;; MongoDB update doesn't return udpated document, so fetch it
+  (card-object-id-to-string (get-card card-id)))
