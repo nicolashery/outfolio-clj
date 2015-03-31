@@ -5,8 +5,6 @@
 
             [outfolio.db :as db]))
 
-(status (response {}) 204)
-
 ;; Fake auth middleware
 (defn wrap-auth [handler]
   (fn [request]
@@ -22,13 +20,6 @@
   (let [user-id (get-in request [:user :_id])]
     (response (db/get-cards-owned-by user-id))))
 
-(defn get-card [request]
-  (let [card-id (get-in request [:params :card-id])
-        card (db/get-card card-id)]
-    (if (nil? card)
-      (error-response 404 "CardNotFound" "No matching card for that id")
-      (response card))))
-
 (defn post-card [request]
   (let [owner (:user request)
         ;; TODO: some validation of request body
@@ -37,32 +28,42 @@
                  (db/create-card))]
     (status (response card) 201)))
 
+;; Middleware to get card from card-id in request params
+;; and check ownership with current user
+(defn wrap-card [handler]
+  (fn [request]
+    (let [user-id (get-in request [:user :_id])
+          card-id (get-in request [:params :card-id])
+          card (db/get-card card-id)
+          card-owned-by-user? (= user-id (get-in card [:owner :_id]))
+          card (if card-owned-by-user? card)]
+      (if (nil? card)
+        (error-response 404 "CardNotFound" "No matching card for that id")
+        (handler (assoc request :card card))))))
+
+(defn get-card [request]
+  (response (:card request)))
+
 (defn put-card [request]
-  (let [card-id (get-in request [:params :card-id])
-        card-updates (:body request)
-        card (db/get-card card-id)]
-    (if (nil? card)
-      (error-response 404 "CardNotFound" "No matching card for that id")
-      (response (db/update-card card-id card-updates)))))
+  (let [card-id (get-in request [:card :_id])
+        card-updates (:body request)]
+    (response (db/update-card card-id card-updates))))
 
 (defn delete-card [request]
-  (let [card-id (get-in request [:params :card-id])
-        card (db/get-card card-id)]
-    (if (nil? card)
-      (error-response 404 "CardNotFound" "No matching card for that id")
-      (do
-        (db/remove-card card-id)
-        (status (response "") 204)))))
+  (let [card-id (get-in request [:card :_id])]
+    (do
+      (db/remove-card card-id)
+      (status (response "") 204))))
 
-(defroutes routes-bare
+(defroutes api-routes*
   (GET "/api/cards" [] get-cards)
-  (GET "/api/cards/:card-id" [] get-card)
   (POST "/api/cards" [] post-card)
-  (PUT "/api/cards/:card-id" [] put-card)
-  (DELETE "/api/cards/:card-id" [] delete-card))
+  (GET "/api/cards/:card-id" [] (wrap-card get-card))
+  (PUT "/api/cards/:card-id" [] (wrap-card put-card))
+  (DELETE "/api/cards/:card-id" [] (wrap-card delete-card)))
 
-(def routes
-  (-> routes-bare
+(def api-routes
+  (-> api-routes*
       (wrap-auth)
       (wrap-json-body)
       (wrap-json-response)))

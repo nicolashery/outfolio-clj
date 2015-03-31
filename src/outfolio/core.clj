@@ -8,7 +8,7 @@
             [outfolio.api :as api]))
 
 (defroutes app-routes
-  api/routes
+  api/api-routes
   (GET "/" [] "Hello World!")
   (route/resources "/")
   (route/not-found "Not Found"))
