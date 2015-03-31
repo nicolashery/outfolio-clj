@@ -1,5 +1,5 @@
 (ns outfolio.api
-  (:require [compojure.core :refer [defroutes GET POST PUT DELETE]]
+  (:require [compojure.core :refer [defroutes GET POST PUT DELETE ANY]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.util.response :refer [response status]]
 
@@ -55,12 +55,16 @@
       (db/remove-card card-id)
       (status (response "") 204))))
 
+(defn not-found [request]
+  (error-response 404 "RouteNotFound" "The API route requested does not exist"))
+
 (defroutes api-routes*
-  (GET "/api/cards" [] get-cards)
-  (POST "/api/cards" [] post-card)
-  (GET "/api/cards/:card-id" [] (wrap-card get-card))
-  (PUT "/api/cards/:card-id" [] (wrap-card put-card))
-  (DELETE "/api/cards/:card-id" [] (wrap-card delete-card)))
+  (GET "/cards" [] get-cards)
+  (POST "/cards" [] post-card)
+  (GET "/cards/:card-id" [] (wrap-card get-card))
+  (PUT "/cards/:card-id" [] (wrap-card put-card))
+  (DELETE "/cards/:card-id" [] (wrap-card delete-card))
+  (ANY "*" [] not-found))
 
 (def api-routes
   (-> api-routes*
