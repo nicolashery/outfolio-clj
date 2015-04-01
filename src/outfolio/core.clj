@@ -5,11 +5,12 @@
             [org.httpkit.server :refer [run-server]]
             [ring.middleware.defaults :refer :all]
 
-            [outfolio.api :as api]))
+            [outfolio.api :as api]
+            [outfolio.view :as view]))
 
 (defroutes app-routes
   (context "/api" [] api/api-routes)
-  (GET "/" [] "Hello World!")
+  (GET "/" [] (view/home))
   (route/resources "/")
   (route/not-found "Not Found"))
 
