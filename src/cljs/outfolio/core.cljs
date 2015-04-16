@@ -5,7 +5,8 @@
             [figwheel.client :as fw]
 
             [outfolio.demo :as demo]
-            [outfolio.navigation :refer [navigation]]))
+            [outfolio.navigation :refer [navigation-view]]
+            [outfolio.cards :refer [cards-view]]))
 
 (enable-console-print!)
 
@@ -22,7 +23,8 @@
   (fn [data owner]
     (om/component (dom/div
                     nil
-                    (om/build navigation (:user data)))))
+                    (om/build navigation-view (:user data))
+                    (om/build cards-view (:cards data)))))
   app-state
   {:target (. js/document (getElementById "app"))})
 

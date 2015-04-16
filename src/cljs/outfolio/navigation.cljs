@@ -2,7 +2,7 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom]))
 
-(defn navigation [user]
+(defn navigation-view [user]
   (om/component
     (dom/div
       #js {:className "navbar"}
