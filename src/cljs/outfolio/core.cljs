@@ -6,12 +6,16 @@
 
             [outfolio.demo :as demo]
             [outfolio.navigation :refer [navigation-view]]
+            [outfolio.subnav-cards :refer [subnav-cards-view]]
             [outfolio.cards :refer [cards-view]]))
 
 (enable-console-print!)
 
-(defonce app-state (atom {:user {}
-                          :cards []}))
+(defonce app-state (atom {:authenticated true
+                          :user nil
+                          :cards []
+                          :card nil
+                          :owner nil}))
 
 (defonce init-data
   (let [user (demo/get-user)
@@ -24,6 +28,9 @@
     (om/component (dom/div
                     nil
                     (om/build navigation-view (:user data))
+                    (om/build
+                      subnav-cards-view
+                      (select-keys data [:authenticated :owner :card]))
                     (om/build cards-view (:cards data)))))
   app-state
   {:target (. js/document (getElementById "app"))})
