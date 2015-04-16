@@ -15,6 +15,7 @@
                  [figwheel "0.2.6"]
                  [cljsjs/react "0.13.1-0"]
                  [org.omcljs/om "0.8.8"]
+                 [secretary "1.2.3"]
                  [org.clojure/tools.logging "0.3.1"]]
 
   :plugins [[lein-cljsbuild "1.0.5"]

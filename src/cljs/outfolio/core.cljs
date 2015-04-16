@@ -4,27 +4,21 @@
             [om.dom :as dom]
             [figwheel.client :as fw]
 
+            [outfolio.state :as state]
+            [outfolio.routes :as routes]
             [outfolio.demo :as demo]
             [outfolio.navigation :refer [navigation-view]]
             [outfolio.subnav-cards :refer [subnav-cards-view]]
-            [outfolio.cards :refer [cards-view]]
-            [outfolio.card :refer [card-view]]))
+            [outfolio.content :refer [content-view]]))
 
 (enable-console-print!)
 
-(defonce app-state (atom {:authenticated true
-                          :user nil
-                          :cards []
-                          :card nil
-                          :owner nil}))
-
-(defonce init-data
-  (let [user (demo/get-user)
-        cards (demo/get-cards)
-        card (demo/get-card "1")]
-    (swap! app-state assoc :user user)
-    (swap! app-state assoc :cards cards)
-    (swap! app-state assoc :card card)))
+(defonce init
+  (do
+    (let [user (demo/get-user)
+          cards (demo/get-cards)]
+      (state/assoc! :user user :cards cards))
+    (routes/init!)))
 
 (om/root
   (fn [data owner]
@@ -34,8 +28,8 @@
                     (om/build
                       subnav-cards-view
                       (select-keys data [:authenticated :owner :card]))
-                    (om/build card-view (:card data)))))
-  app-state
+                    (om/build content-view data))))
+  state/app-state
   {:target (. js/document (getElementById "app"))})
 
 (fw/start)

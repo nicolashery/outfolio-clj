@@ -1,6 +1,8 @@
 (ns outfolio.card-small
   (:require [om.core :as om :include-macros true]
-            [om.dom :as dom]))
+            [om.dom :as dom]
+
+            [outfolio.routes :as r]))
 
 (defn card-small-view [card]
   (om/component
@@ -8,7 +10,7 @@
       (dom/div
         #js {:className "card card-small"}
         (dom/a
-          #js {:href (str "#/card/" (:_id card)) :className "card-link"}
+          #js {:href (r/card-path {:id (:_id card)}) :className "card-link"}
           (dom/div
             #js {:className "card-content"}
             (dom/div
