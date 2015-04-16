@@ -7,7 +7,8 @@
             [outfolio.demo :as demo]
             [outfolio.navigation :refer [navigation-view]]
             [outfolio.subnav-cards :refer [subnav-cards-view]]
-            [outfolio.cards :refer [cards-view]]))
+            [outfolio.cards :refer [cards-view]]
+            [outfolio.card :refer [card-view]]))
 
 (enable-console-print!)
 
@@ -19,9 +20,11 @@
 
 (defonce init-data
   (let [user (demo/get-user)
-        cards (demo/get-cards)]
+        cards (demo/get-cards)
+        card (demo/get-card "1")]
     (swap! app-state assoc :user user)
-    (swap! app-state assoc :cards cards)))
+    (swap! app-state assoc :cards cards)
+    (swap! app-state assoc :card card)))
 
 (om/root
   (fn [data owner]
@@ -31,7 +34,7 @@
                     (om/build
                       subnav-cards-view
                       (select-keys data [:authenticated :owner :card]))
-                    (om/build cards-view (:cards data)))))
+                    (om/build card-view (:card data)))))
   app-state
   {:target (. js/document (getElementById "app"))})
 

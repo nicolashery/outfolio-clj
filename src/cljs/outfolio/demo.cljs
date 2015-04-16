@@ -2,12 +2,12 @@
 
 ; Demo data
 
-(def user
+(def demo-user
   {:_id "1"
    :name "Don Draper"
    :email "dondraper@example.com"})
 
-(def cards
+(def demo-cards
   [{:_id "1"
     :name "The Dead Poet"
     :address "450 Amsterdam Ave (& 81st St)"
@@ -60,7 +60,10 @@
 ; Fake remote API
 
 (defn get-user []
-  user)
+  demo-user)
 
 (defn get-cards []
-  cards)
+  demo-cards)
+
+(defn get-card [card-id]
+  (first (filter #(= card-id (:_id %)) demo-cards)))

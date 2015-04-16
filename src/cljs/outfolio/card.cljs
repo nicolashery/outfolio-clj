@@ -2,7 +2,7 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom]))
 
-(defn card [card]
+(defn card-view [card]
   (om/component
     (dom/div
       #js {:className "card card-single card-show"}
