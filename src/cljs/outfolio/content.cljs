@@ -7,7 +7,7 @@
 
 (defn content-view [data]
   (om/component
-    (case (:content-key data)
+    (case (:route-key data)
       :cards (om/build cards-view (:cards data))
       :card (om/build card-view (:card data))
       (dom/div nil "Not found"))))

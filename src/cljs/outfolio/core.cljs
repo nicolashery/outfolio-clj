@@ -24,10 +24,13 @@
   (fn [data owner]
     (om/component (dom/div
                     nil
-                    (om/build navigation-view (:user data))
+                    (om/build
+                      navigation-view
+                      (select-keys data [:route-key :user]))
                     (om/build
                       subnav-cards-view
-                      (select-keys data [:authenticated :owner :card]))
+                      (select-keys data
+                                   [:route-key :authenticated :owner :card]))
                     (om/build content-view data))))
   state/app-state
   {:target (. js/document (getElementById "app"))})

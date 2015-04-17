@@ -17,40 +17,39 @@
 
 (defroute cards-path "/cards" []
   (state/assoc!
-    :content-key :cards
+    :route-key :cards
     :cards (demo/get-cards)))
 
 (defroute index-path "/" []
   (navigate! (cards-path)))
 
 (defroute cards-new-path "/cards/new" []
-  (println "cards-new-path"))
+  (state/assoc! :route-key :cards-new))
 
 (defroute cards-share-path "/cards/share" []
-  (println "cards-share-path"))
+  (state/assoc! :route-key :cards-share))
 
 (defroute card-path "/card/:id" [id]
   (state/assoc!
-    :content-key :card
+    :route-key :card
     :card (demo/get-card id)))
 
 (defroute card-edit-path "/card/:id/edit" [id]
-  (println "card-edit-path"))
+  (state/assoc! :route-key :card-edit))
 
 (defroute card-share-path "/card/:id/share" [id]
-  (println "card-share-path"))
+  (state/assoc! :route-key :card-share))
 
 (defroute shared-path "/shared/:share-id" [share-id]
-  (println "shared-path"))
+  (state/assoc! :route-key :shared))
 
 (defroute shared-card-path "/shared/:share-id/card/:card-id"
   [share-id card-id]
-  (println "shared-card-path"))
+  (state/assoc! :route-key :shared-card))
 
 (defn hook-browser-navigation! []
   (let [h history
       f (fn [he] ;; goog.History.Event
-          (.log js/console "navigate %o" (clj->js he))
           (let [token (.-token he)]
             (if (seq token) ;; preferred over (not (empty? token))
               (secretary/dispatch! token)

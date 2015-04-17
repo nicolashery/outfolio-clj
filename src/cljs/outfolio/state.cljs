@@ -6,7 +6,7 @@
                           :card nil
                           :owner nil
                           ; UI state
-                          :content-key nil}))
+                          :route-key nil}))
 
 (defn assoc! [& args]
   (apply swap! app-state assoc args))

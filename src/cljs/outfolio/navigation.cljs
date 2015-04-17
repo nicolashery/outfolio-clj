@@ -4,7 +4,7 @@
 
             [outfolio.routes :as r]))
 
-(defn navigation-view [user]
+(defn navigation-view [{:keys [route-key user]}]
   (om/component
     (dom/div
       #js {:className "navbar"}
@@ -18,7 +18,7 @@
           (dom/ul
             #js {:className "nav"}
             (dom/li
-              nil
+              #js {:className (if (= route-key :cards) "active")}
               (dom/a #js {:href (r/cards-path)} "Cards")))
           (dom/ul
             #js {:className "nav nav-right"}
