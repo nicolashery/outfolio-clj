@@ -13,4 +13,4 @@
         (dom/div
           #js {:className "cards-wrapper"}
           (apply dom/ol #js {:className "cards group"}
-                 (om/build-all card-small-view cards)))))))
+                 (om/build-all card-small-view (reverse cards))))))))

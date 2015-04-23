@@ -15,9 +15,7 @@
 
 (defonce init
   (do
-    (let [user (demo/get-user)
-          cards (demo/get-cards)]
-      (state/assoc! :user user :cards cards))
+    (state/put! :user demo/demo-user :cards demo/demo-cards)
     (routes/init!)))
 
 (om/root

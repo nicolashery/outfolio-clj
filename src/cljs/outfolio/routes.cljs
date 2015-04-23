@@ -16,7 +16,7 @@
     (.setToken h token)))
 
 (defroute cards-path "/cards" []
-  (state/assoc!
+  (state/put!
     :route-key :cards
     :cards (demo/get-cards)))
 
@@ -24,28 +24,28 @@
   (navigate! (cards-path)))
 
 (defroute cards-new-path "/cards/new" []
-  (state/assoc! :route-key :cards-new))
+  (state/put! :route-key :cards-new))
 
 (defroute cards-share-path "/cards/share" []
-  (state/assoc! :route-key :cards-share))
+  (state/put! :route-key :cards-share))
 
 (defroute card-path "/card/:id" [id]
-  (state/assoc!
+  (state/put!
     :route-key :card
     :card (demo/get-card id)))
 
 (defroute card-edit-path "/card/:id/edit" [id]
-  (state/assoc! :route-key :card-edit))
+  (state/put! :route-key :card-edit))
 
 (defroute card-share-path "/card/:id/share" [id]
-  (state/assoc! :route-key :card-share))
+  (state/put! :route-key :card-share))
 
 (defroute shared-path "/shared/:share-id" [share-id]
-  (state/assoc! :route-key :shared))
+  (state/put! :route-key :shared))
 
 (defroute shared-card-path "/shared/:share-id/card/:card-id"
   [share-id card-id]
-  (state/assoc! :route-key :shared-card))
+  (state/put! :route-key :shared-card))
 
 (defn hook-browser-navigation! []
   (let [h history

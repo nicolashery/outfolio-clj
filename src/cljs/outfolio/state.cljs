@@ -8,5 +8,5 @@
                           ; UI state
                           :route-key nil}))
 
-(defn assoc! [& args]
+(defn put! [& args]
   (apply swap! app-state assoc args))

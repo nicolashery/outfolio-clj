@@ -1,4 +1,5 @@
-(ns outfolio.demo)
+(ns outfolio.demo
+  (:require [outfolio.state :refer [app-state]]))
 
 ; Demo data
 
@@ -8,7 +9,9 @@
    :email "dondraper@example.com"})
 
 (def demo-cards
-  [{:_id "1"
+  ; Cards are displayed in reverse order in UI ("newest first")
+  ; so if we want this list to appear as-is, we need to reverse it
+  (into [] (reverse [{:_id "1"
     :name "The Dead Poet"
     :address "450 Amsterdam Ave (& 81st St)"
     :city "New York"
@@ -55,15 +58,25 @@
     :address "230 5th Ave (& 27th St)"
     :city "New York"
     :notes "Rooftop bar, amazing view of Empire State, a little expensive, arrive early for a good seat"
-    :owner {:_id "1" :name "Don Draper"}}])
+    :owner {:_id "1" :name "Don Draper"}}])))
 
 ; Fake remote API
 
 (defn get-user []
-  demo-user)
+  (:user @app-state))
 
 (defn get-cards []
-  demo-cards)
+  (:cards @app-state))
 
 (defn get-card [card-id]
-  (first (filter #(= card-id (:_id %)) demo-cards)))
+  (first (filter #(= card-id (:_id %)) (:cards @app-state))))
+
+(defn new-card-id! []
+  (->> (:cards @app-state)
+       (map #(-> % :_id (js/parseInt 10)))
+       (apply max)
+       inc
+       str))
+
+(defn create-card [card-attributes]
+  (assoc card-attributes :_id (new-card-id!)))
