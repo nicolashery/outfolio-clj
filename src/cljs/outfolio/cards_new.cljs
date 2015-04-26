@@ -6,8 +6,7 @@
             [outfolio.routes :as r]))
 
 (defn form-values [owner]
-  {:_id "123"
-   :name (.-value (om/get-node owner "name"))
+  {:name (.-value (om/get-node owner "name"))
    :address (.-value (om/get-node owner "address"))
    :city (.-value (om/get-node owner "city"))
    :notes (.-value (om/get-node owner "notes"))})

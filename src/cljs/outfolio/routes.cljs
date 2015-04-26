@@ -35,7 +35,9 @@
     :card (demo/get-card id)))
 
 (defroute card-edit-path "/card/:id/edit" [id]
-  (state/put! :route-key :card-edit))
+  (state/put!
+    :route-key :card-edit
+    :card (demo/get-card id)))
 
 (defroute card-share-path "/card/:id/share" [id]
   (state/put! :route-key :card-share))

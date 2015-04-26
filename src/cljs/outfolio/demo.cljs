@@ -60,6 +60,20 @@
     :notes "Rooftop bar, amazing view of Empire State, a little expensive, arrive early for a good seat"
     :owner {:_id "1" :name "Don Draper"}}])))
 
+; Helper functions
+
+(defn new-card-id! []
+  (->> (:cards @app-state)
+       (map #(-> % :_id (js/parseInt 10)))
+       (apply max)
+       inc
+       str))
+
+(defn find-card-by-id [card-id]
+  (->> (:cards @app-state)
+       (filterv #(= (:_id %) card-id))
+       (first)))
+
 ; Fake remote API
 
 (defn get-user []
@@ -69,14 +83,12 @@
   (:cards @app-state))
 
 (defn get-card [card-id]
-  (first (filter #(= card-id (:_id %)) (:cards @app-state))))
-
-(defn new-card-id! []
-  (->> (:cards @app-state)
-       (map #(-> % :_id (js/parseInt 10)))
-       (apply max)
-       inc
-       str))
+  (find-card-by-id card-id))
 
 (defn create-card [card-attributes]
   (assoc card-attributes :_id (new-card-id!)))
+
+(defn update-card [card-id card-attributes]
+  (let [card (find-card-by-id card-id)]
+    (if card
+      (merge card card-attributes))))
