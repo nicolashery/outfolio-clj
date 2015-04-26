@@ -2,7 +2,41 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom]
 
+            [outfolio.demo :as demo]
             [outfolio.routes :as r]))
+
+(defn delete-card [card-id cards]
+  (filterv #(not= (:_id %) card-id) cards))
+
+(defn handle-delete-card [confirm? data owner e]
+  (.preventDefault e)
+  (if confirm?
+    (let [{:keys [card cards]} data
+          card-id (:_id card)
+          success? (demo/delete-card card-id)]
+      (om/update! card nil)
+      (om/transact! cards [] (partial delete-card card-id))
+      (r/navigate! (r/cards-path)))
+    (om/set-state! owner :confirm? true)))
+
+(defn delete-card-view [data owner]
+  (reify
+    om/IInitState
+    (init-state [_]
+      {:confirm? false})
+    om/IWillReceiveProps
+    (will-receive-props [_ next-props]
+      (let [prev-props (om/get-props owner)
+            changed-route? (not=
+                             (:route-key next-props)
+                             (:route-key prev-props))]
+        (when changed-route?
+          (om/set-state! owner :confirm? false))))
+    om/IRenderState
+    (render-state [_ {:keys [confirm?]}]
+      (dom/a
+        #js {:href "#" :onClick (partial handle-delete-card confirm? data owner)}
+        (if confirm? "Delete?" "Delete")))))
 
 (defn subnav-cards-view [data]
   (om/component
@@ -50,8 +84,9 @@
                        (dom/a
                          #js {:href (r/card-share-path {:id card-id})}
                          "Share"))
-                     (dom/li nil (dom/a
-                                   #js {:href "#"} "Delete"))]
+                     (dom/li nil (om/build
+                                   delete-card-view
+                                   (select-keys data [:card :cards :route-key])))]
                     (and authenticated (nil? card-owner))
                      [(dom/li
                         #js {:className (if (= route-key :cards-new) "active")}

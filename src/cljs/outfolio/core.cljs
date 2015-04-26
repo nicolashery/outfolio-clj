@@ -27,8 +27,9 @@
                       (select-keys data [:route-key :user]))
                     (om/build
                       subnav-cards-view
-                      (select-keys data
-                                   [:route-key :authenticated :owner :card]))
+                      (select-keys
+                        data
+                        [:route-key :authenticated :owner :card :cards]))
                     (om/build content-view data))))
   state/app-state
   {:target (. js/document (getElementById "app"))})

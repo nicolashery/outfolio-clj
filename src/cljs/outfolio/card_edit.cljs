@@ -11,7 +11,7 @@
    :city (.-value (om/get-node owner "city"))
    :notes (.-value (om/get-node owner "notes"))})
 
-(defn update-cards [updated-card cards]
+(defn update-card [updated-card cards]
   (mapv
    (fn [card]
      (if (= (:_id card) (:_id updated-card))
@@ -24,7 +24,7 @@
         card-id (:_id card)
         updated-card (demo/update-card card-id card-attributes)]
     (om/update! card updated-card)
-    (om/transact! cards [] (partial update-cards updated-card))))
+    (om/transact! cards [] (partial update-card updated-card))))
 
 (defn navigate-back! [card]
   (r/navigate! (r/card-path {:id (:_id card)})))

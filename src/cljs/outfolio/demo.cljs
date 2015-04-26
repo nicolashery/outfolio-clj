@@ -92,3 +92,7 @@
   (let [card (find-card-by-id card-id)]
     (if card
       (merge card card-attributes))))
+
+(defn delete-card [card-id ]
+  (let [card (find-card-by-id card-id)]
+    (if card true)))
