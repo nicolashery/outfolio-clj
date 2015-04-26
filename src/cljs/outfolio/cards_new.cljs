@@ -16,21 +16,13 @@
     (om/transact! cards #(conj % new-card))
     (r/navigate! (r/cards-path))))
 
-(defn clear-form! [owner]
-  (set! (.-value (om/get-node owner "name")) "")
-  (set! (.-value (om/get-node owner "address")) "")
-  (set! (.-value (om/get-node owner "city")) "")
-  (set! (.-value (om/get-node owner "notes")) ""))
-
 (defn handle-add [cards owner e]
   (.preventDefault e)
   (let [card-attributes (form-values owner)]
-    (add-card! cards card-attributes)
-    (clear-form! owner)))
+    (add-card! cards card-attributes)))
 
 (defn handle-cancel [owner e]
   (.preventDefault e)
-  (clear-form! owner)
   (r/navigate! (r/cards-path)))
 
 (defn cards-new-view [cards owner]
