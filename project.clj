@@ -5,7 +5,7 @@
             :url "http://opensource.org/licenses/MIT"}
 
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-3058"]
+                 [org.clojure/clojurescript "0.0-3211"]
                  [com.novemberain/monger "2.1.0"]
                  [compojure "1.3.2"]
                  [hiccup "1.0.5"]
@@ -19,7 +19,7 @@
                  [org.clojure/tools.logging "0.3.1"]]
 
   :plugins [[lein-cljsbuild "1.0.5"]
-            [lein-figwheel "0.2.6"]]
+            [lein-figwheel "0.2.7"]]
 
   :clean-targets ^{:protect false} ["resources/public/js/out"
                                     "resources/public/js/app.js"]
